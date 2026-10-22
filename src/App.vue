@@ -12,23 +12,27 @@ import { ref } from 'vue'
 
 const backgroundMusic = ref<HTMLAudioElement | null>(null)
 
+
 async function handleSoundToggle() {
   const audio = backgroundMusic.value
 
   if (!audio) return
 
-  if (!audio.paused) {
+  if (soundEnabled.value) {
     audio.pause()
+    toggleSound()
     return
   }
 
   try {
     audio.volume = 0.25
     await audio.play()
+    toggleSound()
   } catch (error) {
     console.error('Erro ao reproduzir a música:', error)
   }
 }
+
 
 const {
   pokemon,
@@ -66,7 +70,7 @@ onMounted(() => {
   @click="handleSoundToggle"
 >
   <span class="sound-icon">{{ soundEnabled ? '♫' : '♪' }}</span>
-  {{ soundEnabled ? 'SOM ATIVO' : 'SOM DESATIVADO' }}
+  <span>{{ soundEnabled ? 'SOM ATIVO' : 'SOM DESATIVADO' }}</span>
 </button>
 
 <audio
